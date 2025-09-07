@@ -26,6 +26,7 @@
                         'dark-bg': '#1E1E1E',
                         'dark-card': '#2D2D2D',
                         'dark-border': '#3E3E3E',
+                        'brand-blue': '#3B82F6',
                     },
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
@@ -40,9 +41,7 @@
     <script>
         (function() {
             let theme = localStorage.getItem('theme') || 'dark';
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
+            document.documentElement.classList.add(theme);
         })();
     </script>
 
@@ -51,7 +50,7 @@
             --scrollbar-track-bg: #1E1E1E;
             --scrollbar-thumb-bg: #3E3E3E;
         }
-        html.light:root {
+        html.light {
             --scrollbar-track-bg: #F1F1F1;
             --scrollbar-thumb-bg: #DCDCDC;
         }
@@ -86,12 +85,14 @@
             position: fixed;
             left: 50%;
             transform: translateX(-50%);
-            top: 10px;
+            top: 20px;
             padding: 6px 15px;
             width: 90%;
             max-width: 500px;
             z-index: 50;
             border-radius: 9999px;
+            opacity: 0; /* Começa invisível para animação */
+            animation: fadeInDown 0.8s 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         .navbar ul {
             display: flex;
@@ -109,13 +110,14 @@
             display: inline-block;
             position: relative;
             color: #a7a7a7;
-            transition: color 0.3s ease;
+            transition: color 0.4s ease, transform 0.4s ease;
         }
         html.light .nav-link {
             color: #4b5563;
         }
         .nav-link:hover {
             color: #ffffff;
+            transform: translateY(-2px);
         }
         html.light .nav-link:hover {
              color: #000000;
@@ -129,9 +131,9 @@
             height: 2px;
             bottom: 0;
             left: 0;
-            background-color: #FBBF24;
+            background-color: #3B82F6; /* Cor azul solicitada */
             transform-origin: bottom center;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .nav-link:hover::after,
         .nav-link.active::after {
@@ -146,23 +148,31 @@
         }
         .mobile-nav-link {
              color: #d1d5db;
+             transition: background-color 0.3s ease, transform 0.3s ease;
         }
         html.light .mobile-nav-link {
              color: #374151;
+        }
+        .mobile-nav-link:hover {
+            transform: translateX(5px);
         }
 
 
         /* Animações e Utilitários */
         @keyframes fadeInModal {
-            from { opacity: 0; transform: scale(0.98); }
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
         .modal-fade-in {
-            animation: fadeInModal 0.3s ease-out forwards;
+            animation: fadeInModal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translate(-50%, -100%); }
+            to { opacity: 1; transform: translate(-50%, 0); }
         }
         .hidden { display: none; }
         
@@ -172,14 +182,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 6rem 1rem; /* Padding ajustado para melhor visualização mobile */
+            padding: 8rem 1rem;
         }
         .section-content {
             opacity: 0;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
         }
         .section-content.is-visible {
-            animation: fadeInUp 0.8s ease-out forwards;
+            animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         
         /* Efeito radial para os botões */
@@ -187,7 +197,7 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
-            transition: box-shadow 0.4s ease, color 0.4s ease;
+            transition: box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1), color 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .btn-radial-effect .btn-content {
             position: relative;
@@ -203,7 +213,7 @@
             background-color: white;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
+            transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1), height 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             z-index: 0;
         }
         .btn-radial-effect:hover::before {
@@ -212,7 +222,8 @@
         }
         .btn-radial-effect:hover {
             color: #1E1E1E;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3), 0 0 10px rgba(59, 130, 246, 0.2);
         }
         
         /* Animação sutil de fundo */
@@ -247,7 +258,7 @@
             100% { transform: translateY(0) translateX(0); }
         }
 
-        /* Efeito de aura suave (Corrigido) */
+        /* Efeito de aura suave */
         .aura-container {
             position: relative;
             display: flex;
@@ -255,10 +266,10 @@
             justify-content: center;
         }
         .aura-container img {
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         .aura-container:hover img {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
         .aura-container::after { /* Gradiente suave */
             content: '';
@@ -276,15 +287,48 @@
             to { transform: rotate(360deg); }
         }
         
+        /* Botão de Tema */
+        #theme-toggle {
+            transition: background-color 0.4s ease, transform 0.4s ease;
+        }
+        #theme-toggle:hover {
+          transform: scale(1.1);
+          background-color: rgba(59, 130, 246, 0.2); /* Brilho azul sutil */
+        }
         #theme-toggle svg {
             transition: transform 0.5s ease-in-out;
         }
         .toggled svg {
             transform: rotate(180deg);
         }
+
+        /* Menu Mobile */
+        #mobile-menu {
+            transition-duration: 500ms;
+        }
+        #mobile-menu.is-open nav ul li {
+          opacity: 0;
+          transform: translateX(-15px);
+          animation: slideIn 0.5s ease-out forwards;
+        }
+        #mobile-menu.is-open nav ul li:nth-child(1) { animation-delay: 0.1s; }
+        #mobile-menu.is-open nav ul li:nth-child(2) { animation-delay: 0.15s; }
+        #mobile-menu.is-open nav ul li:nth-child(3) { animation-delay: 0.2s; }
+        #mobile-menu.is-open nav ul li:nth-child(4) { animation-delay: 0.25s; }
+        @keyframes slideIn {
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Botões do Modal */
+        #prev-slide, #next-slide {
+          transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        #prev-slide:not(:disabled):hover, #next-slide:not(:disabled):hover {
+          transform: translateY(-2px);
+        }
     </style>
 </head>
-<body class="transition-colors duration-300">
+<body class="transition-colors duration-300 bg-light-bg dark:bg-dark-bg">
 
     <!-- Fundo animado -->
     <div id="background-animation">
@@ -294,8 +338,8 @@
     </div>
     
     <!-- Backgrounds Dinâmicos -->
-    <div id="light-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-500 opacity-0" style="background-image: url('https://i.imgur.com/2566gq6.png');"></div>
-    <div id="dark-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-500 opacity-0" style="background-image: url('https://i.imgur.com/dI5Nb2r.png');"></div>
+    <div id="light-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/2566gq6.png');"></div>
+    <div id="dark-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/dI5Nb2r.png');"></div>
 
     <!-- Mobile Menu Button -->
     <button id="mobile-menu-button" class="md:hidden fixed top-4 right-4 z-[90] p-2 rounded-md bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-sm">
@@ -303,7 +347,7 @@
     </button>
 
     <!-- Mobile Side Menu -->
-    <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg border-r border-light-border/50 dark:border-dark-border/50 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[100]">
+    <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg border-r border-light-border/50 dark:border-dark-border/50 shadow-lg transform -translate-x-full transition-transform ease-in-out z-[100]">
         <div class="flex justify-between items-center p-4 border-b border-light-border/50 dark:border-dark-border/50">
              <h2 class="font-bold text-lg text-gray-800 dark:text-white">Navegação</h2>
             <button id="close-mobile-menu">
@@ -312,10 +356,10 @@
         </div>
         <nav class="p-4">
             <ul class="flex flex-col space-y-2">
-                <li><a href="#cfsd" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFSd</a></li>
-                <li><a href="#cfcb" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFCb</a></li>
-                <li><a href="#cfsgt" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFSgt</a></li>
-                <li><a href="#cfsbt" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFSbt</a></li>
+                <li><a href="#cfsd" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">CFSd</a></li>
+                <li><a href="#cfcb" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">CFCb</a></li>
+                <li><a href="#cfsgt" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">CFSgt</a></li>
+                <li><a href="#cfsbt" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">CFSbt</a></li>
             </ul>
         </nav>
     </div>
@@ -342,7 +386,7 @@
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE SOLDADO/POLICIAL</h1>
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a soldados/policiais+</p>
                     <div class="mt-8">
-                        <button data-course="soldado" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                        <button data-course="soldado" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
                             <span class="btn-content flex items-center gap-2">
                                 VISUALIZAR
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
@@ -363,7 +407,7 @@
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE CABO/ESCRIVÃO</h1>
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a cabos/escrivães+</p>
                     <div class="mt-8">
-                        <button data-course="cabo" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                        <button data-course="cabo" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
                             <span class="btn-content flex items-center gap-2">
                                 VISUALIZAR
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
@@ -384,7 +428,7 @@
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE SARGENTO/DELEGADO</h1>
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a sargentos/delegados+</p>
                     <div class="mt-8">
-                         <button data-course="sargento" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                         <button data-course="sargento" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
                             <span class="btn-content flex items-center gap-2">
                                 VISUALIZAR
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
@@ -405,7 +449,7 @@
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE SUBTENENTE/PROMOTOR</h1>
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a subtenentes/promotores+</p>
                     <div class="mt-8">
-                        <button data-course="subtenente" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                        <button data-course="subtenente" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
                            <span class="btn-content flex items-center gap-2">
                                 VISUALIZAR
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
@@ -419,7 +463,7 @@
 
     <!-- Seletor de Tema -->
     <div class="fixed bottom-5 left-5 z-50">
-        <button id="theme-toggle" aria-label="Mudar tema" class="w-12 h-12 flex items-center justify-center rounded-full bg-light-card/25 dark:bg-dark-card/25 backdrop-blur-lg border border-light-border/50 dark:border-dark-border/50 shadow-md transition-colors">
+        <button id="theme-toggle" aria-label="Mudar tema" class="w-12 h-12 flex items-center justify-center rounded-full bg-light-card/25 dark:bg-dark-card/25 backdrop-blur-lg border border-light-border/50 dark:border-dark-border/50 shadow-md">
             <!-- Ícone inserido via JS -->
         </button>
     </div>
@@ -435,9 +479,9 @@
             </div>
             <div id="slide-content" class="p-6 md:p-8 overflow-y-auto flex-grow"></div>
             <div class="flex justify-between items-center p-4 border-t border-light-border dark:border-dark-border">
-                <button id="prev-slide" class="px-5 py-2 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-gray-800 dark:text-gray-300 font-semibold rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">Voltar</button>
+                <button id="prev-slide" class="px-5 py-2 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-gray-800 dark:text-gray-300 font-semibold rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">Voltar</button>
                 <div id="slide-counter" class="text-sm font-medium text-gray-500 dark:text-gray-400"></div>
-                <button id="next-slide" class="px-5 py-2 bg-gray-700 dark:bg-gray-200 text-white dark:text-black font-semibold rounded-md hover:bg-gray-800 dark:hover:bg-white transition">Próximo</button>
+                <button id="next-slide" class="px-5 py-2 bg-gray-700 dark:bg-gray-200 text-white dark:text-black font-semibold rounded-md hover:bg-gray-800 dark:hover:bg-white">Próximo</button>
             </div>
         </div>
     </div>
@@ -536,9 +580,9 @@
                 
                 let imagesHTML = '';
                 if (slide.images && slide.images.length > 0) {
-                      const imageTags = slide.images.map((src, index) => `
-                        <img src="${src}" alt="Imagem do slide" class="slide-image ${index > 0 ? 'hidden' : ''} rounded-lg shadow-md w-full h-auto object-contain max-h-60 md:max-h-80">
-                    `).join('');
+                        const imageTags = slide.images.map((src, index) => `
+                            <img src="${src}" alt="Imagem do slide" class="slide-image ${index > 0 ? 'hidden' : ''} rounded-lg shadow-md w-full h-auto object-contain max-h-60 md:max-h-80">
+                        `).join('');
 
                     imagesHTML = `
                         <div class="image-gallery-container flex flex-col items-center gap-3 w-full mt-6 md:mt-0">
@@ -600,7 +644,7 @@
                     if (courseData[courseKey]?.slides.length > 0) {
                         openModal(courseKey);
                     } else {
-                        // Replace alert with a custom notification if you build one
+                        // Idealmente, substitua 'alert' por um modal de notificação mais elegante.
                         alert('Conteúdo para este curso não está disponível ainda.');
                     }
                 });
@@ -624,11 +668,13 @@
             function updateThemeUI(theme) {
                 if (theme === 'dark') {
                     document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
                     themeToggle.innerHTML = sunIcon;
                     darkBgImg.classList.remove('opacity-0');
                     lightBgImg.classList.add('opacity-0');
                 } else {
                     document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
                     themeToggle.innerHTML = moonIcon;
                     darkBgImg.classList.add('opacity-0');
                     lightBgImg.classList.remove('opacity-0');
@@ -657,7 +703,7 @@
                         content.classList.add('is-visible');
                     }
                 });
-            }, { threshold: 0.3 }); // Anima um pouco antes de chegar no meio
+            }, { threshold: 0.3 });
             sections.forEach(section => observer.observe(section));
 
             // --- Lógica do Menu Responsivo ---
@@ -669,12 +715,14 @@
 
             function openMenu() {
                 mobileMenu.classList.remove('-translate-x-full');
+                mobileMenu.classList.add('is-open'); // Para animar os links
                 menuOverlay.classList.remove('hidden');
                 document.body.classList.add('overflow-hidden', 'md:overflow-auto');
             }
 
             function closeMenu() {
                 mobileMenu.classList.add('-translate-x-full');
+                mobileMenu.classList.remove('is-open'); // Reseta a animação
                 menuOverlay.classList.add('hidden');
                 document.body.classList.remove('overflow-hidden', 'md:overflow-auto');
             }
@@ -689,3 +737,4 @@
     </script>
 </body>
 </html>
+
