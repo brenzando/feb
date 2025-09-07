@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aulas</title>
+    <title>[EsGM] Cursos</title>
     
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Configuração customizada do Tailwind -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -34,6 +37,7 @@
         }
     </script>
     
+    <!-- Aplica o tema salvo no localStorage -->
     <script>
         (function() {
             let theme = localStorage.getItem('theme') || 'dark';
@@ -54,29 +58,65 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #1E1E1E; /* Fallback */
-            color: #d1d5db; /* Cor de texto padrão para dark mode */
+            color: #d1d5db;
             scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
             scrollbar-width: thin;
-            overflow: hidden; /* Previne o scroll da página inteira */
+            overflow: hidden; 
         }
         html.light body {
             background-color: #F1F1F1;
-            color: #374151; /* Cor de texto padrão para light mode */
+            color: #374151;
         }
         
         /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background-color: var(--scrollbar-track-bg);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background-color: var(--scrollbar-track-bg); }
         ::-webkit-scrollbar-thumb {
             background-color: var(--scrollbar-thumb-bg);
             border-radius: 10px;
             border: 2px solid var(--scrollbar-track-bg);
         }
 
+        /* --- ✨ NOVO: Estilos do Preloader --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: #1E1E1E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease-in-out;
+        }
+        html.light #preloader {
+            background-color: #F1F1F1;
+        }
+        .preloader-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader-icon {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #3E3E3E;
+            border-radius: 50%;
+            border-top-color: #3B82F6;
+            animation: spin 1s linear infinite;
+        }
+        html.light .loader-icon {
+            border-color: #DCDCDC;
+            border-top-color: #3B82F6;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Oculta o conteúdo principal inicialmente */
+        .content-hidden {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
         /* Estilos da Navbar */
         .navbar {
             position: fixed;
@@ -88,276 +128,164 @@
             max-width: 500px;
             z-index: 50;
             border-radius: 9999px;
-            opacity: 0; /* Começa invisível para animação */
-            animation: fadeInDown 0.8s 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+            animation: fadeInDown 0.8s 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
-        .navbar ul {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            gap: 1.25rem;
-        }
-        .navbar li {
-            text-align: center;
-        }
+        .navbar ul { display: flex; justify-content: center; width: 100%; gap: 1.25rem; }
+        .navbar li { text-align: center; }
         .nav-link {
-            padding: 10px 5px;
-            font-size: 14px;
-            font-weight: 500;
-            display: inline-block;
-            position: relative;
-            color: #a7a7a7;
+            padding: 10px 5px; font-size: 14px; font-weight: 500; display: inline-block;
+            position: relative; color: #a7a7a7;
             transition: color 0.4s ease, transform 0.4s ease;
         }
-        html.light .nav-link {
-            color: #4b5563;
-        }
-        .nav-link:hover {
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-        html.light .nav-link:hover {
-             color: #000000;
-        }
-        /* Efeito de sublinhado */
+        html.light .nav-link { color: #4b5563; }
+        .nav-link:hover { color: #ffffff; transform: translateY(-2px); }
+        html.light .nav-link:hover { color: #000000; }
         .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            transform: scaleX(0);
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #3B82F6; /* Cor azul solicitada */
-            transform-origin: bottom center;
+            content: ''; position: absolute; width: 100%; transform: scaleX(0); height: 2px;
+            bottom: 0; left: 0; background-color: #3B82F6; transform-origin: bottom center;
             transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            transform: scaleX(1);
-        }
-        .nav-link.active {
-            color: #ffffff;
-            font-weight: 600;
-        }
-        html.light .nav-link.active {
-            color: #000000;
-        }
-        .mobile-nav-link {
-             color: #d1d5db;
-             transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        html.light .mobile-nav-link {
-             color: #374151;
-        }
-        .mobile-nav-link:hover {
-            transform: translateX(5px);
-        }
-
+        .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+        .nav-link.active { color: #ffffff; font-weight: 600; }
+        html.light .nav-link.active { color: #000000; }
+        .mobile-nav-link { color: #d1d5db; transition: background-color 0.3s ease, transform 0.3s ease; }
+        html.light .mobile-nav-link { color: #374151; }
+        .mobile-nav-link:hover { transform: translateX(5px); }
 
         /* Animações e Utilitários */
         @keyframes fadeInModal {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
-        .modal-fade-in {
-            animation: fadeInModal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
+        .modal-fade-in { animation: fadeInModal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
         @keyframes fadeInDown {
             from { opacity: 0; transform: translate(-50%, -100%); }
             to { opacity: 1; transform: translate(-50%, 0); }
         }
         .hidden { display: none; }
         
-        /* --- ✨ NOVO: Estilos para transição de seção --- */
-        main {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-        }
-        
+        /* --- ✨ APRIMORADO: Estilos para transição de secção --- */
+        main { position: relative; width: 100vw; height: 100vh; }
         .section-container {
-            /* Propriedades para alinhar o conteúdo */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8rem 1rem;
-            
-            /* Propriedades para empilhar e animar */
-            position: absolute;
-            inset: 0; /* equivale a top, right, bottom, left = 0 */
-            transition: opacity 700ms cubic-bezier(0.4, 0, 0.2, 1), transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; justify-content: center;
+            padding: 8rem 1rem; position: absolute; inset: 0;
+            /* Duração, curva e propriedades da transição aprimoradas */
+            transition: opacity 1000ms cubic-bezier(0.87, 0, 0.13, 1), 
+                        transform 1000ms cubic-bezier(0.87, 0, 0.13, 1),
+                        filter 1000ms cubic-bezier(0.87, 0, 0.13, 1);
         }
-        
         .section-inactive {
             opacity: 0;
             transform: scale(0.95); /* Encolhe ao sair */
+            filter: blur(10px); /* Desfoca ao sair */
             pointer-events: none;
             z-index: 1;
         }
-
         .section-active {
             opacity: 1;
             transform: scale(1); /* Tamanho normal ao entrar */
+            filter: blur(0); /* Foca ao entrar */
             pointer-events: auto;
             z-index: 10;
         }
-        
-        .section-content {
-             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-        }
+        .section-content { text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
         
         /* Efeito radial para os botões */
         .btn-radial-effect {
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
+            position: relative; overflow: hidden; z-index: 1;
             transition: box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1), color 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        .btn-radial-effect .btn-content {
-            position: relative;
-            z-index: 2;
-        }
+        .btn-radial-effect .btn-content { position: relative; z-index: 2; }
         .btn-radial-effect::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background-color: white;
-            border-radius: 50%;
+            content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
+            background-color: white; border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1), height 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             z-index: 0;
         }
-        .btn-radial-effect:hover::before {
-            width: 250%;
-            padding-top: 250%; /* Mantém a proporção circular */
-        }
+        .btn-radial-effect:hover::before { width: 250%; padding-top: 250%; }
         .btn-radial-effect:hover {
-            color: #1E1E1E;
-            transform: scale(1.05);
+            color: #1E1E1E; transform: scale(1.05);
             box-shadow: 0 0 25px rgba(59, 130, 246, 0.3), 0 0 10px rgba(59, 130, 246, 0.2);
         }
         
-        /* Animação sutil de fundo */
-        #background-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
+        /* Fundo animado */
+        #background-animation { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
         .circle {
-            position: absolute;
-            border-radius: 50%;
+            position: absolute; border-radius: 50%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
             animation: move 25s linear infinite;
         }
-        html.light .circle {
-             background: radial-gradient(circle, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0));
-        }
+        html.light .circle { background: radial-gradient(circle, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0)); }
         .circle.xxlarge { width: 40vw; height: 40vw; }
         .circle.xlarge { width: 30vw; height: 30vw; }
         .circle.large { width: 20vw; height: 20vw; }
         .shade1 { top: 10%; left: 10%; animation-duration: 20s; }
         .shade2 { top: 50%; left: 60%; animation-duration: 30s; }
         .shade3 { top: 80%; left: 20%; animation-duration: 25s; }
-        
         @keyframes move {
             0% { transform: translateY(0) translateX(0); }
             50% { transform: translateY(-40px) translateX(40px); }
             100% { transform: translateY(0) translateX(0); }
         }
 
-        /* Efeito de aura suave */
-        .aura-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .aura-container img {
-            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-        .aura-container:hover img {
-            transform: scale(1.08);
-        }
-        .aura-container::after { /* Gradiente suave */
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
+        /* Efeito de aura */
+        .aura-container { position: relative; display: flex; align-items: center; justify-content: center; }
+        .aura-container img { transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .aura-container:hover img { transform: scale(1.08); }
+        .aura-container::after {
+            content: ''; position: absolute; width: 150%; height: 150%;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 60%);
-            border-radius: 50%;
-            z-index: 0; /* Garante que a aura fique atrás da imagem */
+            border-radius: 50%; z-index: 0;
             animation: slow-spin 20s linear infinite;
         }
-        
-        @keyframes slow-spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        @keyframes slow-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         
         /* Botão de Tema */
-        #theme-toggle {
-            transition: background-color 0.4s ease, transform 0.4s ease;
-        }
-        #theme-toggle:hover {
-           transform: scale(1.1);
-           background-color: rgba(59, 130, 246, 0.2); /* Brilho azul sutil */
-        }
-        #theme-toggle svg {
-            transition: transform 0.5s ease-in-out;
-        }
-        .toggled svg {
-            transform: rotate(180deg);
-        }
+        #theme-toggle { transition: background-color 0.4s ease, transform 0.4s ease; }
+        #theme-toggle:hover { transform: scale(1.1); background-color: rgba(59, 130, 246, 0.2); }
+        #theme-toggle svg { transition: transform 0.5s ease-in-out; }
+        .toggled svg { transform: rotate(180deg); }
 
         /* Menu Mobile */
-        #mobile-menu {
-            transition-duration: 500ms;
-        }
-        #mobile-menu.is-open nav ul li {
-           opacity: 0;
-           transform: translateX(-15px);
-           animation: slideIn 0.5s ease-out forwards;
-        }
+        #mobile-menu { transition-duration: 500ms; }
+        #mobile-menu.is-open nav ul li { opacity: 0; transform: translateX(-15px); animation: slideIn 0.5s ease-out forwards; }
         #mobile-menu.is-open nav ul li:nth-child(1) { animation-delay: 0.1s; }
         #mobile-menu.is-open nav ul li:nth-child(2) { animation-delay: 0.15s; }
         #mobile-menu.is-open nav ul li:nth-child(3) { animation-delay: 0.2s; }
         #mobile-menu.is-open nav ul li:nth-child(4) { animation-delay: 0.25s; }
-        @keyframes slideIn {
-           to { opacity: 1; transform: translateX(0); }
-        }
+        @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
 
         /* Botões do Modal */
-        #prev-slide, #next-slide {
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        #prev-slide:not(:disabled):hover, #next-slide:not(:disabled):hover {
-            transform: translateY(-2px);
-        }
+        #prev-slide, #next-slide { transition: background-color 0.3s ease, transform 0.3s ease; }
+        #prev-slide:not(:disabled):hover, #next-slide:not(:disabled):hover { transform: translateY(-2px); }
     </style>
 </head>
 <body class="transition-colors duration-300 bg-light-bg dark:bg-dark-bg">
 
+    <!-- ✨ NOVO: Preloader -->
+    <div id="preloader">
+        <div class="loader-icon"></div>
+    </div>
+
+    <!-- Fundo animado -->
     <div id="background-animation">
         <div class="circle xxlarge shade1"></div>
         <div class="circle xlarge shade2"></div>
         <div class="circle large shade3"></div>
     </div>
     
+    <!-- Backgrounds Dinâmicos -->
     <div id="light-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/2566gq6.png');"></div>
     <div id="dark-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/dI5Nb2r.png');"></div>
 
+    <!-- Mobile Menu Button -->
     <button id="mobile-menu-button" class="md:hidden fixed top-4 right-4 z-[90] p-2 rounded-md bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-sm">
         <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
     </button>
 
+    <!-- Mobile Side Menu -->
     <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg border-r border-light-border/50 dark:border-dark-border/50 shadow-lg transform -translate-x-full transition-transform ease-in-out z-[100]">
         <div class="flex justify-between items-center p-4 border-b border-light-border/50 dark:border-dark-border/50">
               <h2 class="font-bold text-lg text-gray-800 dark:text-white">Navegação</h2>
@@ -376,7 +304,8 @@
     </div>
     <div id="menu-overlay" class="md:hidden hidden fixed inset-0 bg-black/50 z-[99]"></div>
 
-    <nav class="navbar hidden md:block bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-xl border border-light-border/30 dark:border-dark-border/30">
+    <!-- ✨ MODIFICADO: Adicionada classe "content-hidden" -->
+    <nav class="navbar hidden md:block bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-xl border border-light-border/30 dark:border-dark-border/30 content-hidden">
         <ul>
             <li><a href="#cfsd" class="nav-link">CFSd</a></li>
             <li><a href="#cfcb" class="nav-link">CFCb</a></li>
@@ -385,7 +314,9 @@
         </ul>
     </nav>
 
-    <main>
+    <!-- ✨ MODIFICADO: Adicionada classe "content-hidden" -->
+    <main class="content-hidden">
+        <!-- Seção: Curso de Formação de Soldado -->
         <section id="cfsd" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -396,16 +327,14 @@
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a soldados/policiais+</p>
                     <div class="mt-8">
                         <button data-course="soldado" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
-                            <span class="btn-content flex items-center gap-2">
-                                VISUALIZAR
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </span>
+                            <span class="btn-content flex items-center gap-2">VISUALIZAR <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></span>
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Seção: Curso de Formação de Cabo -->
         <section id="cfcb" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -416,16 +345,14 @@
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a cabos/escrivães+</p>
                     <div class="mt-8">
                         <button data-course="cabo" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
-                            <span class="btn-content flex items-center gap-2">
-                                VISUALIZAR
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </span>
+                            <span class="btn-content flex items-center gap-2">VISUALIZAR<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></span>
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Seção: Curso de Formação de Sargento -->
         <section id="cfsgt" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                  <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -436,16 +363,14 @@
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a sargentos/delegados+</p>
                     <div class="mt-8">
                          <button data-course="sargento" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
-                            <span class="btn-content flex items-center gap-2">
-                                VISUALIZAR
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </span>
+                            <span class="btn-content flex items-center gap-2">VISUALIZAR<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></span>
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Seção: Curso de Formação de Subtenente -->
         <section id="cfsbt" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -456,10 +381,7 @@
                     <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a subtenentes/promotores+</p>
                     <div class="mt-8">
                         <button data-course="subtenente" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold">
-                           <span class="btn-content flex items-center gap-2">
-                                VISUALIZAR
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                            </span>
+                           <span class="btn-content flex items-center gap-2">VISUALIZAR<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></span>
                         </button>
                     </div>
                 </div>
@@ -467,18 +389,19 @@
         </section>
     </main>
 
+    <!-- Seletor de Tema -->
     <div class="fixed bottom-5 left-5 z-50">
         <button id="theme-toggle" aria-label="Mudar tema" class="w-12 h-12 flex items-center justify-center rounded-full bg-light-card/25 dark:bg-dark-card/25 backdrop-blur-lg border border-light-border/50 dark:border-dark-border/50 shadow-md">
-            </button>
+            <!-- Ícone inserido via JS -->
+        </button>
     </div>
 
+    <!-- Modal para Slides -->
     <div id="slide-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-[110] flex items-center justify-center p-4">
         <div class="modal-fade-in w-11/12 max-w-lg md:max-w-4xl bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-lg shadow-2xl flex flex-col max-h-[90vh]">
             <div class="flex justify-between items-center p-4 border-b border-light-border dark:border-dark-border">
                 <h3 id="course-title" class="text-lg font-semibold text-gray-900 dark:text-white">Título do Curso</h3>
-                <button id="close-modal" class="text-gray-400 hover:text-gray-800 dark:hover:text-white">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-800 dark:hover:text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
             <div id="slide-content" class="p-6 md:p-8 overflow-y-auto flex-grow"></div>
             <div class="flex justify-between items-center p-4 border-t border-light-border dark:border-dark-border">
@@ -490,7 +413,29 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // --- ✨ NOVO: Lógica do Preloader ---
+        window.onload = () => {
+            const preloader = document.getElementById('preloader');
+            const contentToReveal = document.querySelectorAll('.content-hidden');
+
+            // Começa a esconder o preloader
+            preloader.classList.add('preloader-hidden');
+            
+            // Remove o preloader do DOM após a transição para não interferir com cliques
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 800);
+
+            // Revela o conteúdo principal
+            contentToReveal.forEach(el => {
+                el.classList.remove('content-hidden');
+            });
+
+            // O resto do script é executado depois que a página está totalmente carregada
+            initializePage();
+        };
+
+        function initializePage() {
             // --- Dados dos Cursos ---
             const courseData = {
                 soldado: {
@@ -520,7 +465,6 @@
                 subtenente: { title: 'CURSO DE FORMAÇÃO DE SUBTENENTE/PROMOTOR', slides: [] }
             };
 
-            // --- Lógica do Modal ---
             const modal = document.getElementById('slide-modal');
             const openModalButtons = document.querySelectorAll('.open-modal-btn');
             const closeModalBtn = document.getElementById('close-modal');
@@ -529,50 +473,30 @@
             const prevBtn = document.getElementById('prev-slide');
             const nextBtn = document.getElementById('next-slide');
             const slideCounterEl = document.getElementById('slide-counter');
-
             let currentCourse = '';
             let currentSlideIndex = 0;
 
             function initializeImageGallery() {
                 const galleryContainer = slideContentEl.querySelector('.image-gallery-container');
                 if (!galleryContainer) return;
-
                 const images = Array.from(galleryContainer.querySelectorAll('.slide-image'));
                 const prevImageBtn = galleryContainer.querySelector('.prev-image');
                 const nextImageBtn = galleryContainer.querySelector('.next-image');
-
                 if (images.length <= 1) {
                     if (prevImageBtn) prevImageBtn.parentElement.classList.add('hidden');
                     return;
                 }
-
                 let currentImageIndex = 0;
-
                 function updateGallery() {
-                    images.forEach((img, index) => {
-                        img.classList.toggle('hidden', index !== currentImageIndex);
-                    });
-                    prevImageBtn.parentElement.classList.remove('hidden'); // Ensure container is visible
+                    images.forEach((img, index) => img.classList.toggle('hidden', index !== currentImageIndex));
+                    prevImageBtn.parentElement.classList.remove('hidden');
                     prevImageBtn.disabled = currentImageIndex === 0;
                     nextImageBtn.disabled = currentImageIndex === images.length - 1;
                     prevImageBtn.classList.toggle('opacity-50', currentImageIndex === 0);
                     nextImageBtn.classList.toggle('opacity-50', currentImageIndex === images.length - 1);
                 }
-
-                nextImageBtn.addEventListener('click', () => {
-                    if (currentImageIndex < images.length - 1) {
-                        currentImageIndex++;
-                        updateGallery();
-                    }
-                });
-
-                prevImageBtn.addEventListener('click', () => {
-                    if (currentImageIndex > 0) {
-                        currentImageIndex--;
-                        updateGallery();
-                    }
-                });
-
+                nextImageBtn.addEventListener('click', () => { if (currentImageIndex < images.length - 1) { currentImageIndex++; updateGallery(); } });
+                prevImageBtn.addEventListener('click', () => { if (currentImageIndex > 0) { currentImageIndex--; updateGallery(); } });
                 updateGallery();
             }
 
@@ -580,44 +504,13 @@
                 const course = courseData[courseKey];
                 if (!course?.slides?.[slideIndex]) return;
                 const slide = course.slides[slideIndex];
-                
                 let imagesHTML = '';
                 if (slide.images && slide.images.length > 0) {
-                        const imageTags = slide.images.map((src, index) => `
-                            <img src="${src}" alt="Imagem do slide" class="slide-image ${index > 0 ? 'hidden' : ''} rounded-lg shadow-md w-full h-auto object-contain max-h-60 md:max-h-80">
-                        `).join('');
-
-                    imagesHTML = `
-                        <div class="image-gallery-container flex flex-col items-center gap-3 w-full mt-6 md:mt-0">
-                            <div class="relative w-full min-h-[100px] flex items-center justify-center">${imageTags}</div>
-                            <div class="flex gap-4">
-                                <button class="prev-image bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                                </button>
-                                <button class="next-image bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                    `;
+                    const imageTags = slide.images.map((src, index) => `<img src="${src}" alt="Imagem do slide" class="slide-image ${index > 0 ? 'hidden' : ''} rounded-lg shadow-md w-full h-auto object-contain max-h-60 md:max-h-80">`).join('');
+                    imagesHTML = `<div class="image-gallery-container flex flex-col items-center gap-3 w-full mt-6 md:mt-0"><div class="relative w-full min-h-[100px] flex items-center justify-center">${imageTags}</div><div class="flex gap-4"><button class="prev-image bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button><button class="next-image bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button></div></div>`;
                 }
-
-                const textHTML = `<div>
-                                    <h4 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">${slide.title}</h4>
-                                    <div class="text-base text-gray-700 dark:text-gray-300 leading-relaxed text-justify space-y-3">${slide.text}</div>
-                                </div>`;
-
-                if (imagesHTML) {
-                    slideContentEl.innerHTML = `
-                        <div class="grid md:grid-cols-2 gap-8 items-start">
-                            ${textHTML}
-                            ${imagesHTML}
-                        </div>
-                    `;
-                } else {
-                    slideContentEl.innerHTML = textHTML;
-                }
-
+                const textHTML = `<div><h4 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">${slide.title}</h4><div class="text-base text-gray-700 dark:text-gray-300 leading-relaxed text-justify space-y-3">${slide.text}</div></div>`;
+                slideContentEl.innerHTML = imagesHTML ? `<div class="grid md:grid-cols-2 gap-8 items-start">${textHTML}${imagesHTML}</div>` : textHTML;
                 initializeImageGallery();
                 updateNavigation(slideIndex, course.slides.length);
             };
@@ -639,26 +532,19 @@
             };
             const closeModal = () => {
                 modal.classList.add('hidden');
-                // Body overflow is handled globally now, so no need to change it here
+                document.body.style.overflow = '';
             };
             openModalButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const courseKey = button.getAttribute('data-course');
-                    if (courseData[courseKey]?.slides.length > 0) {
-                        openModal(courseKey);
-                    } else {
-                        alert('Conteúdo para este curso não está disponível ainda.');
-                    }
+                    if (courseData[courseKey]?.slides.length > 0) openModal(courseKey);
+                    else alert('Conteúdo para este curso não está disponível ainda.');
                 });
             });
             closeModalBtn.addEventListener('click', closeModal);
             modal.addEventListener('click', (e) => e.target === modal && closeModal());
-            prevBtn.addEventListener('click', () => {
-                if (currentSlideIndex > 0) renderSlide(currentCourse, --currentSlideIndex);
-            });
-            nextBtn.addEventListener('click', () => {
-                if (currentSlideIndex < courseData[currentCourse].slides.length - 1) renderSlide(currentCourse, ++currentSlideIndex);
-            });
+            prevBtn.addEventListener('click', () => { if (currentSlideIndex > 0) renderSlide(currentCourse, --currentSlideIndex); });
+            nextBtn.addEventListener('click', () => { if (currentSlideIndex < courseData[currentCourse].slides.length - 1) renderSlide(currentCourse, ++currentSlideIndex); });
 
             // --- Lógica do Tema ---
             const themeToggle = document.getElementById('theme-toggle');
@@ -666,7 +552,6 @@
             const darkBgImg = document.getElementById('dark-bg-img');
             const sunIcon = `<svg class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
             const moonIcon = `<svg class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
-
             function updateThemeUI(theme) {
                 if (theme === 'dark') {
                     document.documentElement.classList.add('dark');
@@ -690,89 +575,49 @@
                 setTimeout(() => themeToggle.classList.remove('toggled'), 500);
             });
             updateThemeUI(localStorage.getItem('theme') || 'dark');
-
             
-            // --- ✨ NOVO: Lógica de Transição de Seção ---
+            // --- Lógica de Transição de Secção ---
             const allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
             const sections = document.querySelectorAll('.section-container');
-
-            // 1. Definir o estado inicial
             sections.forEach((section, index) => {
-                if (index === 0) {
-                    section.classList.add('section-active');
-                } else {
-                    section.classList.add('section-inactive');
-                }
+                if (index === 0) section.classList.add('section-active');
+                else section.classList.add('section-inactive');
             });
             document.querySelector('.nav-link[href="#cfsd"]')?.classList.add('active');
 
-
-            // 2. Criar a função para trocar de seção
             function switchSection(event) {
-                event.preventDefault(); // Impede o comportamento padrão de link de âncora
-                
+                event.preventDefault();
                 const targetId = event.currentTarget.getAttribute('href');
                 const targetSection = document.querySelector(targetId);
-
-                // Não faz nada se a seção clicada já estiver ativa
-                if (!targetSection || targetSection.classList.contains('section-active')) {
-                    return;
-                }
-
-                // Encontra a seção atualmente ativa
+                if (!targetSection || targetSection.classList.contains('section-active')) return;
                 const currentActiveSection = document.querySelector('.section-active');
-
-                // Desativa a seção atual
                 if (currentActiveSection) {
                     currentActiveSection.classList.remove('section-active');
                     currentActiveSection.classList.add('section-inactive');
                 }
-                
-                // Ativa a nova seção
                 targetSection.classList.add('section-active');
                 targetSection.classList.remove('section-inactive');
-                
-                // Atualiza o estado 'active' nos links de navegação
                 allNavLinks.forEach(link => {
                     link.classList.remove('active');
-                    if (link.getAttribute('href') === targetId) {
-                        link.classList.add('active');
-                    }
+                    if (link.getAttribute('href') === targetId) link.classList.add('active');
                 });
             }
+            allNavLinks.forEach(link => link.addEventListener('click', switchSection));
 
-            // 3. Adicionar o evento de clique a todos os links de navegação
-            allNavLinks.forEach(link => {
-                link.addEventListener('click', switchSection);
-            });
-
-
-            // --- Lógica do Menu Responsivo (sem alterações) ---
+            // --- Lógica do Menu Responsivo ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const closeMobileMenuButton = document.getElementById('close-mobile-menu');
             const menuOverlay = document.getElementById('menu-overlay');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-
-            function openMenu() {
-                mobileMenu.classList.remove('-translate-x-full');
-                mobileMenu.classList.add('is-open'); // Para animar os links
-                menuOverlay.classList.remove('hidden');
-            }
-
-            function closeMenu() {
-                mobileMenu.classList.add('-translate-x-full');
-                mobileMenu.classList.remove('is-open'); // Reseta a animação
-                menuOverlay.classList.add('hidden');
-            }
-
+            function openMenu() { mobileMenu.classList.remove('-translate-x-full'); mobileMenu.classList.add('is-open'); menuOverlay.classList.remove('hidden'); }
+            function closeMenu() { mobileMenu.classList.add('-translate-x-full'); mobileMenu.classList.remove('is-open'); menuOverlay.classList.add('hidden'); }
             mobileMenuButton.addEventListener('click', openMenu);
             closeMobileMenuButton.addEventListener('click', closeMenu);
             menuOverlay.addEventListener('click', closeMenu);
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', closeMenu);
-            });
-        });
+            mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+        }
     </script>
 </body>
 </html>
+
