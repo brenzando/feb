@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aulas - EsGM</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Configuração customizada do Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'light-bg': '#F1F1F1',
+                        'light-card': '#E9E9E9',
+                        'light-border': '#DCDCDC',
+                        'dark-bg': '#1E1E1E',
+                        'dark-card': '#2D2D2D',
+                        'dark-border': '#3E3E3E',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                },
+            },
+            plugins: [],
+        }
+    </script>
+    
+    <!-- Aplica o tema salvo no localStorage -->
+    <script>
+        (function() {
+            let theme = localStorage.getItem('theme') || 'dark';
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
+
+    <style>
+        :root {
+            --scrollbar-track-bg: #1E1E1E;
+            --scrollbar-thumb-bg: #3E3E3E;
+        }
+        html.light:root {
+            --scrollbar-track-bg: #F1F1F1;
+            --scrollbar-thumb-bg: #DCDCDC;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1E1E1E; /* Fallback */
+            color: #d1d5db; /* Cor de texto padrão para dark mode */
+            scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
+            scrollbar-width: thin;
+        }
+        html.light body {
+            background-color: #F1F1F1;
+            color: #374151; /* Cor de texto padrão para light mode */
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: var(--scrollbar-track-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb-bg);
+            border-radius: 10px;
+            border: 2px solid var(--scrollbar-track-bg);
+        }
+
+        /* Estilos da Navbar */
+        .navbar {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 10px;
+            padding: 6px 15px;
+            width: 90%;
+            max-width: 500px;
+            z-index: 50;
+            border-radius: 9999px;
+        }
+        .navbar ul {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            gap: 1.25rem;
+        }
+        .navbar li {
+            text-align: center;
+        }
+        .nav-link {
+            padding: 10px 5px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            position: relative;
+            color: #a7a7a7;
+            transition: color 0.3s ease;
+        }
+        html.light .nav-link {
+            color: #4b5563;
+        }
+        .nav-link:hover {
+            color: #ffffff;
+        }
+        html.light .nav-link:hover {
+             color: #000000;
+        }
+        /* Efeito de sublinhado */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #FBBF24;
+            transform-origin: bottom center;
+            transition: transform 0.3s ease-out;
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            transform: scaleX(1);
+        }
+        .nav-link.active {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        html.light .nav-link.active {
+            color: #000000;
+        }
+        .mobile-nav-link {
+             color: #d1d5db;
+        }
+        html.light .mobile-nav-link {
+             color: #374151;
+        }
+
+
+        /* Animações e Utilitários */
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-fade-in {
+            animation: fadeInModal 0.3s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hidden { display: none; }
+        
+        /* Conteúdo das seções */
+        .section-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 1rem; /* Padding ajustado para melhor visualização mobile */
+        }
+        .section-content {
+            opacity: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        .section-content.is-visible {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        /* Efeito radial para os botões */
+        .btn-radial-effect {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: box-shadow 0.4s ease, color 0.4s ease;
+        }
+        .btn-radial-effect .btn-content {
+            position: relative;
+            z-index: 2;
+        }
+        .btn-radial-effect::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0;
+        }
+        .btn-radial-effect:hover::before {
+            width: 250%;
+            padding-top: 250%; /* Mantém a proporção circular */
+        }
+        .btn-radial-effect:hover {
+            color: #1E1E1E;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Animação sutil de fundo */
+        #background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+            animation: move 25s linear infinite;
+        }
+        html.light .circle {
+             background: radial-gradient(circle, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0));
+        }
+        .circle.xxlarge { width: 40vw; height: 40vw; }
+        .circle.xlarge { width: 30vw; height: 30vw; }
+        .circle.large { width: 20vw; height: 20vw; }
+        .shade1 { top: 10%; left: 10%; animation-duration: 20s; }
+        .shade2 { top: 50%; left: 60%; animation-duration: 30s; }
+        .shade3 { top: 80%; left: 20%; animation-duration: 25s; }
+        
+        @keyframes move {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-40px) translateX(40px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        /* Efeito de aura suave (Corrigido) */
+        .aura-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .aura-container img {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .aura-container:hover img {
+            transform: scale(1.05);
+        }
+        .aura-container::after { /* Gradiente suave */
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 60%);
+            border-radius: 50%;
+            z-index: 0; /* Garante que a aura fique atrás da imagem */
+            animation: slow-spin 20s linear infinite;
+        }
+        
+        @keyframes slow-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        #theme-toggle svg {
+            transition: transform 0.5s ease-in-out;
+        }
+        .toggled svg {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="transition-colors duration-300">
+
+    <!-- Fundo animado -->
+    <div id="background-animation">
+        <div class="circle xxlarge shade1"></div>
+        <div class="circle xlarge shade2"></div>
+        <div class="circle large shade3"></div>
+    </div>
+    
+    <!-- Backgrounds Dinâmicos -->
+    <div id="light-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-500 opacity-0" style="background-image: url('https://i.imgur.com/2566gq6.png');"></div>
+    <div id="dark-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-500 opacity-0" style="background-image: url('https://i.imgur.com/dI5Nb2r.png');"></div>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="md:hidden fixed top-4 right-4 z-[90] p-2 rounded-md bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-sm">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+    </button>
+
+    <!-- Mobile Side Menu -->
+    <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg border-r border-light-border/50 dark:border-dark-border/50 shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-[100]">
+        <div class="flex justify-between items-center p-4 border-b border-light-border/50 dark:border-dark-border/50">
+             <h2 class="font-bold text-lg text-gray-800 dark:text-white">Navegação</h2>
+            <button id="close-mobile-menu">
+                <svg class="w-6 h-6 text-gray-800 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="p-4">
+            <ul class="flex flex-col space-y-2">
+                <li><a href="#cfsd" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFSd</a></li>
+                <li><a href="#cfcb" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFCb</a></li>
+                <li><a href="#cfsgt" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFSgt</a></li>
+                <li><a href="#cfsbt" class="mobile-nav-link block text-lg font-semibold p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">CFSbt</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="menu-overlay" class="md:hidden hidden fixed inset-0 bg-black/50 z-[99]"></div>
+
+    <!-- Cabeçalho de Navegação (Desktop) -->
+    <nav class="navbar hidden md:block bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-xl border border-light-border/30 dark:border-dark-border/30">
+        <ul>
+            <li><a href="#cfsd" class="nav-link">CFSd</a></li>
+            <li><a href="#cfcb" class="nav-link">CFCb</a></li>
+            <li><a href="#cfsgt" class="nav-link">CFSgt</a></li>
+            <li><a href="#cfsbt" class="nav-link">CFSbt</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Seção: Curso de Formação de Soldado -->
+        <section id="cfsd" class="section-container">
+            <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
+                <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
+                </div>
+                <div>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE SOLDADO/POLICIAL</h1>
+                    <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a soldados/policiais+</p>
+                    <div class="mt-8">
+                        <button data-course="soldado" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                            <span class="btn-content flex items-center gap-2">
+                                VISUALIZAR
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Curso de Formação de Cabo -->
+        <section id="cfcb" class="section-container">
+            <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
+                <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
+                </div>
+                <div>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE CABO/ESCRIVÃO</h1>
+                    <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a cabos/escrivães+</p>
+                    <div class="mt-8">
+                        <button data-course="cabo" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                            <span class="btn-content flex items-center gap-2">
+                                VISUALIZAR
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Curso de Formação de Sargento -->
+        <section id="cfsgt" class="section-container">
+            <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
+                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
+                </div>
+                <div>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE SARGENTO/DELEGADO</h1>
+                    <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a sargentos/delegados+</p>
+                    <div class="mt-8">
+                         <button data-course="sargento" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                            <span class="btn-content flex items-center gap-2">
+                                VISUALIZAR
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Curso de Formação de Subtenente -->
+        <section id="cfsbt" class="section-container">
+            <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
+                <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
+                    <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
+                </div>
+                <div>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">CURSO DE FORMAÇÃO DE SUBTENENTE/PROMOTOR</h1>
+                    <p class="mt-4 text-base md:text-lg max-w-2xl mx-auto md:mx-0">Destinado a subtenentes/promotores+</p>
+                    <div class="mt-8">
+                        <button data-course="subtenente" class="open-modal-btn btn-radial-effect inline-flex items-center gap-2 px-6 py-3 border-2 border-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                           <span class="btn-content flex items-center gap-2">
+                                VISUALIZAR
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Seletor de Tema -->
+    <div class="fixed bottom-5 left-5 z-50">
+        <button id="theme-toggle" aria-label="Mudar tema" class="w-12 h-12 flex items-center justify-center rounded-full bg-light-card/25 dark:bg-dark-card/25 backdrop-blur-lg border border-light-border/50 dark:border-dark-border/50 shadow-md transition-colors">
+            <!-- Ícone inserido via JS -->
+        </button>
+    </div>
+
+    <!-- Modal para Slides -->
+    <div id="slide-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-[110] flex items-center justify-center p-4">
+        <div class="modal-fade-in w-11/12 max-w-lg md:max-w-4xl bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-lg shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center p-4 border-b border-light-border dark:border-dark-border">
+                <h3 id="course-title" class="text-lg font-semibold text-gray-900 dark:text-white">Título do Curso</h3>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-800 dark:hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="slide-content" class="p-6 md:p-8 overflow-y-auto flex-grow"></div>
+            <div class="flex justify-between items-center p-4 border-t border-light-border dark:border-dark-border">
+                <button id="prev-slide" class="px-5 py-2 bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border text-gray-800 dark:text-gray-300 font-semibold rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition">Voltar</button>
+                <div id="slide-counter" class="text-sm font-medium text-gray-500 dark:text-gray-400"></div>
+                <button id="next-slide" class="px-5 py-2 bg-gray-700 dark:bg-gray-200 text-white dark:text-black font-semibold rounded-md hover:bg-gray-800 dark:hover:bg-white transition">Próximo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Dados dos Cursos ---
+            const courseData = {
+                soldado: {
+                    title: 'CURSO DE FORMAÇÃO DE SOLDADO/POLICIAL',
+                    slides: [
+                        { title: 'INTRODUÇÃO', text: 'Para criar sua conta no system acesse no seu navegador: <strong><a href="http://feb.syshabbo.com" class="text-blue-500 hover:underline" target="_blank">feb.syshabbo.com</a></strong> <br><br>Vá em <strong>REGISTRAR</strong> e preencha com todos os dados solicitados.', images: ['https://i.imgur.com/b3eGJHy.gif']},
+                        { title: 'DADOS DE REGISTRO', text: '<strong>Nickname</strong> - Seu nick no habbo. <br><br><strong>E-mail</strong> - Um email que não esteja vinculado à sua conta do Habbo ou conta pessoal, tenha um e-mail próprio para o system.<br><br><strong>Senha</strong> - Uma senha forte com 8 caracteres ou mais, números, letras e símbolos, vale ressaltar que por segurança <strong>NÃO REGISTRE EM HIPOTESE ALGUMA A MESMA SENHA USADA NO HABBO!<strong>', images: ['https://i.imgur.com/naFaQbY.png']},
+                        { title: 'VALIDAÇÃO', text: 'Ao preencher tudo existe um código que você deve copiar e colocar na sua missão dentro do habbo, quando isto estiver feito basta clicar em registrar para sua conta ser criada.', images: ['https://i.imgur.com/lNomELG.png', 'https://i.imgur.com/arut8J2.png']}
+                    ]
+                },
+                cabo: { 
+                    title: 'CURSO DE FORMAÇÃO DE CABO/ESCRIVÃO', 
+                    slides: [
+                        {title: 'FUNÇÕES DO BATALHÃO', text:'Ao todo temos 6 funções no batalhão, sendo elas: <br> Cabo da Guarda, Oficial da Guarda, Auxiliar Operacional, Operadores, Recepção e Sentinela. <br><br> E você como cabo poderá assumir as funções na sala de controle, sendo os operadores e sentinela.', images:['https://i.imgur.com/Yps1sFC.png']},
+                        {title: 'SALA DE CONTROLES', text:'A sala de controles é o local de entrada de todos os militares inferiores a Suboficial/Promotor, ou seja, soldado, cabo, sargento, subtenente e suas equivalências entram/passam pela sala de controle. Dito isso, é importante que saiba que cada patente/cargo tem seus cursos, ou seja, o final da missão nunca será o mesmo. ', images:['https://i.imgur.com/D6Up6fL.png']},
+                        {title: 'OPERADORES', text: '<strong>OPERADOR 1</strong> <br><br> A função do Operador 1 é verificar corretamente os requisitos básicos de um militar: fardamento, missão, grupo favoritado no momento e perfil do militar. Todos os requisitos devem seguir o padrão exigido pelo Anexo III da Constituição Militar.', images:['https://i.imgur.com/3UmU0wf.png']},
+                        {title: 'OPERADORES', text: '<strong>OPERADOR 2</strong> <br><br> A função do Operador 2 é verificar o balão de fala do militar (que sempre deve ser branco), as costas e a TAG e cursos no System.', images:['https://i.imgur.com/XPn81Me.png']},
+                        {title: 'OPERADORES', text: '<strong>OPERADOR 3</strong> <br><br> A função do Operador 3 é verificar todos os requisitos básicos, sendo eles: missão, fardamento, balão de fala, perfil, grupos e grupo favoritado, e se tudo está conforme o Anexo III da Constituição Militar.. Além dessas verificações, o Operador 3 confere no System se o recruta consta como exonerado ou não.', images:['https://i.imgur.com/9hUexVo.png']},
+                        {title: 'SEGURANÇA DE CONFERÊNCIA', text: 'A função de operador, em qualquer uma das três modalidades, exige total atenção aos detalhes e o cumprimento dos seguintes <strong>protocolos de segurança:</strong> <br><br> Copiar <strong>sempre</strong> o nickname do militar <strong>pelo sussurro</strong>, para evitar margem de erro e entrada de fakes. <br><br> Checar <strong>sempre</strong> o estado do <strong>perfil</strong>, se está online. <br><br> Verificar <strong>todos os grupos</strong> dos militares/recrutas que passarem por você, independentemente de quantos sejam, além de conferir <strong>os nomes dos grupos</strong> (se estão de acordo) <strong>e os donos</strong>, caso suspeite de algo.'},
+                        {title: 'SENTINELA', text: 'O sentinela é a função responsável por aplicar a pré-aula aos novos recrutas, repassar todos seus conhecimentos de forma orgânica e sem uso de scripts ou um documento pronto. O sentinela utiliza a cor cinza no balão de fala.', images:['https://i.imgur.com/8F9Rsw6.png']},
+                        {title: 'COMANDOS', text: 'As funções dos <strong>Operadores</strong> e da <strong>Sentinela</strong> possuem comandos específicos para a liberação dos militares/recrutas, sendo eles: <br><br> Operador 1: <strong>:op1</strong> <br><br> Operador 2: <strong>:op2</strong> <br><br> Operador 3: <strong>:op3</strong> <br><br> Sentinela: <strong>:corredor</strong> | <strong>:sala1</strong> | <strong>:sala2</strong> <br><br> <center><strong>VOLTE AO JOGO E INFORME SEU INSTRUTOR QUE TERMINOU A PRIMEIRA PARTE!</strong></center>'},
+                        {title: 'SEGURANÇA PESSOAL E INSTITUCIONAL', text: 'Nós temos alguns métodos e dicas para garantir maior <strong>segurança pessoal</strong> e, assim, também assegurar a <strong>segurança institucional</strong> e de todos os membros da FEB. Para isso, é necessário seguir algumas regras: <br><br> •<strong> Não compartilhar seus dados, mesmo com amigos próximos ou parentes;</strong> <br> •<strong> Não armazenar suas senhas em locais online ou em blocos de notas;</strong> <br> •<strong> Não acessar sites suspeitos ou estranhos, especialmente os que prometem fornecer “moedas”;</strong> <br> •<strong> Jamais compartilhar sua conta com terceiros, sejam amigos ou parentes;</strong>  <br> •<strong>Seguir as regras da Habbo Etiqueta;</strong> <br> •<strong>Seguir as regras e documentações da instituição.</strong>'},
+                        {title: 'SEGURANÇA PESSOAL E INSTITUCIONAL', text: 'Seguindo todos esses passos, você estará mantendo sua conta segura e, ao mesmo tempo, garantindo que a instituição não seja afetada por erros que você possa cometer. <br> Caso descumpra alguma dessas regras, estará sujeito a punições de acordo com o <strong>Código Penal Militar.</strong> <br><br> <strong>Observação:</strong> caso perca o acesso à sua conta ou ela seja hackeada, informe o mais rápido possível a um membro do <strong>Setor de Inteligência da FEB.</strong>'}
+                    ] 
+                },
+                sargento: { title: 'CURSO DE FORMAÇÃO DE SARGENTO/DELEGADO', slides: [] },
+                subtenente: { title: 'CURSO DE FORMAÇÃO DE SUBTENENTE/PROMOTOR', slides: [] }
+            };
+
+            // --- Lógica do Modal ---
+            const modal = document.getElementById('slide-modal');
+            const openModalButtons = document.querySelectorAll('.open-modal-btn');
+            const closeModalBtn = document.getElementById('close-modal');
+            const courseTitleEl = document.getElementById('course-title');
+            const slideContentEl = document.getElementById('slide-content');
+            const prevBtn = document.getElementById('prev-slide');
+            const nextBtn = document.getElementById('next-slide');
+            const slideCounterEl = document.getElementById('slide-counter');
+
+            let currentCourse = '';
+            let currentSlideIndex = 0;
+
+            function initializeImageGallery() {
+                const galleryContainer = slideContentEl.querySelector('.image-gallery-container');
+                if (!galleryContainer) return;
+
+                const images = Array.from(galleryContainer.querySelectorAll('.slide-image'));
+                const prevImageBtn = galleryContainer.querySelector('.prev-image');
+                const nextImageBtn = galleryContainer.querySelector('.next-image');
+
+                if (images.length <= 1) {
+                    if (prevImageBtn) prevImageBtn.parentElement.classList.add('hidden');
+                    return;
+                }
+
+                let currentImageIndex = 0;
+
+                function updateGallery() {
+                    images.forEach((img, index) => {
+                        img.classList.toggle('hidden', index !== currentImageIndex);
+                    });
+                    prevImageBtn.parentElement.classList.remove('hidden'); // Ensure container is visible
+                    prevImageBtn.disabled = currentImageIndex === 0;
+                    nextImageBtn.disabled = currentImageIndex === images.length - 1;
+                    prevImageBtn.classList.toggle('opacity-50', currentImageIndex === 0);
+                    nextImageBtn.classList.toggle('opacity-50', currentImageIndex === images.length - 1);
+                }
+
+                nextImageBtn.addEventListener('click', () => {
+                    if (currentImageIndex < images.length - 1) {
+                        currentImageIndex++;
+                        updateGallery();
+                    }
+                });
+
+                prevImageBtn.addEventListener('click', () => {
+                    if (currentImageIndex > 0) {
+                        currentImageIndex--;
+                        updateGallery();
+                    }
+                });
+
+                updateGallery();
+            }
+
+            const renderSlide = (courseKey, slideIndex) => {
+                const course = courseData[courseKey];
+                if (!course?.slides?.[slideIndex]) return;
+                const slide = course.slides[slideIndex];
+                
+                let imagesHTML = '';
+                if (slide.images && slide.images.length > 0) {
+                      const imageTags = slide.images.map((src, index) => `
+                        <img src="${src}" alt="Imagem do slide" class="slide-image ${index > 0 ? 'hidden' : ''} rounded-lg shadow-md w-full h-auto object-contain max-h-60 md:max-h-80">
+                    `).join('');
+
+                    imagesHTML = `
+                        <div class="image-gallery-container flex flex-col items-center gap-3 w-full mt-6 md:mt-0">
+                            <div class="relative w-full min-h-[100px] flex items-center justify-center">${imageTags}</div>
+                            <div class="flex gap-4">
+                                <button class="prev-image bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                </button>
+                                <button class="next-image bg-light-card dark:bg-dark-card border border-light-border dark:border-dark-border rounded-full p-2 hover:bg-gray-300 dark:hover:bg-gray-600 transition disabled:opacity-50">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const textHTML = `<div>
+                                    <h4 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">${slide.title}</h4>
+                                    <div class="text-base text-gray-700 dark:text-gray-300 leading-relaxed text-justify space-y-3">${slide.text}</div>
+                                </div>`;
+
+                if (imagesHTML) {
+                    slideContentEl.innerHTML = `
+                        <div class="grid md:grid-cols-2 gap-8 items-start">
+                            ${textHTML}
+                            ${imagesHTML}
+                        </div>
+                    `;
+                } else {
+                    slideContentEl.innerHTML = textHTML;
+                }
+
+                initializeImageGallery();
+                updateNavigation(slideIndex, course.slides.length);
+            };
+
+            const updateNavigation = (index, total) => {
+                slideCounterEl.textContent = `Página ${index + 1} de ${total}`;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === total - 1;
+                prevBtn.classList.toggle('opacity-50', index === 0);
+                nextBtn.classList.toggle('opacity-50', index === total - 1);
+            };
+            const openModal = (courseKey) => {
+                currentCourse = courseKey;
+                currentSlideIndex = 0;
+                courseTitleEl.textContent = courseData[currentCourse].title;
+                renderSlide(currentCourse, currentSlideIndex);
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            };
+            const closeModal = () => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            };
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const courseKey = button.getAttribute('data-course');
+                    if (courseData[courseKey]?.slides.length > 0) {
+                        openModal(courseKey);
+                    } else {
+                        // Replace alert with a custom notification if you build one
+                        alert('Conteúdo para este curso não está disponível ainda.');
+                    }
+                });
+            });
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => e.target === modal && closeModal());
+            prevBtn.addEventListener('click', () => {
+                if (currentSlideIndex > 0) renderSlide(currentCourse, --currentSlideIndex);
+            });
+            nextBtn.addEventListener('click', () => {
+                if (currentSlideIndex < courseData[currentCourse].slides.length - 1) renderSlide(currentCourse, ++currentSlideIndex);
+            });
+
+            // --- Lógica do Tema ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const lightBgImg = document.getElementById('light-bg-img');
+            const darkBgImg = document.getElementById('dark-bg-img');
+            const sunIcon = `<svg class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+            const moonIcon = `<svg class="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+
+            function updateThemeUI(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    themeToggle.innerHTML = sunIcon;
+                    darkBgImg.classList.remove('opacity-0');
+                    lightBgImg.classList.add('opacity-0');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    themeToggle.innerHTML = moonIcon;
+                    darkBgImg.classList.add('opacity-0');
+                    lightBgImg.classList.remove('opacity-0');
+                }
+            }
+            themeToggle.addEventListener('click', () => {
+                themeToggle.classList.add('toggled');
+                const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+                localStorage.setItem('theme', newTheme);
+                updateThemeUI(newTheme);
+                setTimeout(() => themeToggle.classList.remove('toggled'), 500);
+            });
+            updateThemeUI(localStorage.getItem('theme') || 'dark');
+
+            // --- Lógica de Navegação Ativa e Animação de Scroll ---
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const content = entry.target.querySelector('.section-content');
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                        });
+                        content.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.3 }); // Anima um pouco antes de chegar no meio
+            sections.forEach(section => observer.observe(section));
+
+            // --- Lógica do Menu Responsivo ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+            const menuOverlay = document.getElementById('menu-overlay');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            function openMenu() {
+                mobileMenu.classList.remove('-translate-x-full');
+                menuOverlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden', 'md:overflow-auto');
+            }
+
+            function closeMenu() {
+                mobileMenu.classList.add('-translate-x-full');
+                menuOverlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden', 'md:overflow-auto');
+            }
+
+            mobileMenuButton.addEventListener('click', openMenu);
+            closeMobileMenuButton.addEventListener('click', closeMenu);
+            menuOverlay.addEventListener('click', closeMenu);
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+        });
+    </script>
+</body>
+</html>
