@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aulas - EsGM</title>
+    <title>Aulas</title>
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Configuração customizada do Tailwind -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -37,7 +34,6 @@
         }
     </script>
     
-    <!-- Aplica o tema salvo no localStorage -->
     <script>
         (function() {
             let theme = localStorage.getItem('theme') || 'dark';
@@ -61,6 +57,7 @@
             color: #d1d5db; /* Cor de texto padrão para dark mode */
             scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
             scrollbar-width: thin;
+            overflow: hidden; /* Previne o scroll da página inteira */
         }
         html.light body {
             background-color: #F1F1F1;
@@ -166,30 +163,48 @@
         .modal-fade-in {
             animation: fadeInModal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
         @keyframes fadeInDown {
             from { opacity: 0; transform: translate(-50%, -100%); }
             to { opacity: 1; transform: translate(-50%, 0); }
         }
         .hidden { display: none; }
         
-        /* Conteúdo das seções */
+        /* --- ✨ NOVO: Estilos para transição de seção --- */
+        main {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
         .section-container {
-            min-height: 100vh;
+            /* Propriedades para alinhar o conteúdo */
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 8rem 1rem;
+            
+            /* Propriedades para empilhar e animar */
+            position: absolute;
+            inset: 0; /* equivale a top, right, bottom, left = 0 */
+            transition: opacity 700ms cubic-bezier(0.4, 0, 0.2, 1), transform 700ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .section-content {
+        
+        .section-inactive {
             opacity: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+            transform: scale(0.95); /* Encolhe ao sair */
+            pointer-events: none;
+            z-index: 1;
         }
-        .section-content.is-visible {
-            animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+
+        .section-active {
+            opacity: 1;
+            transform: scale(1); /* Tamanho normal ao entrar */
+            pointer-events: auto;
+            z-index: 10;
+        }
+        
+        .section-content {
+             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
         }
         
         /* Efeito radial para os botões */
@@ -292,8 +307,8 @@
             transition: background-color 0.4s ease, transform 0.4s ease;
         }
         #theme-toggle:hover {
-          transform: scale(1.1);
-          background-color: rgba(59, 130, 246, 0.2); /* Brilho azul sutil */
+           transform: scale(1.1);
+           background-color: rgba(59, 130, 246, 0.2); /* Brilho azul sutil */
         }
         #theme-toggle svg {
             transition: transform 0.5s ease-in-out;
@@ -307,49 +322,45 @@
             transition-duration: 500ms;
         }
         #mobile-menu.is-open nav ul li {
-          opacity: 0;
-          transform: translateX(-15px);
-          animation: slideIn 0.5s ease-out forwards;
+           opacity: 0;
+           transform: translateX(-15px);
+           animation: slideIn 0.5s ease-out forwards;
         }
         #mobile-menu.is-open nav ul li:nth-child(1) { animation-delay: 0.1s; }
         #mobile-menu.is-open nav ul li:nth-child(2) { animation-delay: 0.15s; }
         #mobile-menu.is-open nav ul li:nth-child(3) { animation-delay: 0.2s; }
         #mobile-menu.is-open nav ul li:nth-child(4) { animation-delay: 0.25s; }
         @keyframes slideIn {
-          to { opacity: 1; transform: translateX(0); }
+           to { opacity: 1; transform: translateX(0); }
         }
 
         /* Botões do Modal */
         #prev-slide, #next-slide {
-          transition: background-color 0.3s ease, transform 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
         #prev-slide:not(:disabled):hover, #next-slide:not(:disabled):hover {
-          transform: translateY(-2px);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body class="transition-colors duration-300 bg-light-bg dark:bg-dark-bg">
 
-    <!-- Fundo animado -->
     <div id="background-animation">
         <div class="circle xxlarge shade1"></div>
         <div class="circle xlarge shade2"></div>
         <div class="circle large shade3"></div>
     </div>
     
-    <!-- Backgrounds Dinâmicos -->
     <div id="light-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/2566gq6.png');"></div>
     <div id="dark-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/dI5Nb2r.png');"></div>
 
-    <!-- Mobile Menu Button -->
     <button id="mobile-menu-button" class="md:hidden fixed top-4 right-4 z-[90] p-2 rounded-md bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-sm">
         <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
     </button>
 
-    <!-- Mobile Side Menu -->
     <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg border-r border-light-border/50 dark:border-dark-border/50 shadow-lg transform -translate-x-full transition-transform ease-in-out z-[100]">
         <div class="flex justify-between items-center p-4 border-b border-light-border/50 dark:border-dark-border/50">
-             <h2 class="font-bold text-lg text-gray-800 dark:text-white">Navegação</h2>
+              <h2 class="font-bold text-lg text-gray-800 dark:text-white">Navegação</h2>
             <button id="close-mobile-menu">
                 <svg class="w-6 h-6 text-gray-800 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -365,7 +376,6 @@
     </div>
     <div id="menu-overlay" class="md:hidden hidden fixed inset-0 bg-black/50 z-[99]"></div>
 
-    <!-- Cabeçalho de Navegação (Desktop) -->
     <nav class="navbar hidden md:block bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-xl border border-light-border/30 dark:border-dark-border/30">
         <ul>
             <li><a href="#cfsd" class="nav-link">CFSd</a></li>
@@ -376,7 +386,6 @@
     </nav>
 
     <main>
-        <!-- Seção: Curso de Formação de Soldado -->
         <section id="cfsd" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -397,7 +406,6 @@
             </div>
         </section>
 
-        <!-- Seção: Curso de Formação de Cabo -->
         <section id="cfcb" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -418,7 +426,6 @@
             </div>
         </section>
 
-        <!-- Seção: Curso de Formação de Sargento -->
         <section id="cfsgt" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                  <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -439,7 +446,6 @@
             </div>
         </section>
 
-        <!-- Seção: Curso de Formação de Subtenente -->
         <section id="cfsbt" class="section-container">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
@@ -461,14 +467,11 @@
         </section>
     </main>
 
-    <!-- Seletor de Tema -->
     <div class="fixed bottom-5 left-5 z-50">
         <button id="theme-toggle" aria-label="Mudar tema" class="w-12 h-12 flex items-center justify-center rounded-full bg-light-card/25 dark:bg-dark-card/25 backdrop-blur-lg border border-light-border/50 dark:border-dark-border/50 shadow-md">
-            <!-- Ícone inserido via JS -->
-        </button>
+            </button>
     </div>
 
-    <!-- Modal para Slides -->
     <div id="slide-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-[110] flex items-center justify-center p-4">
         <div class="modal-fade-in w-11/12 max-w-lg md:max-w-4xl bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-lg shadow-2xl flex flex-col max-h-[90vh]">
             <div class="flex justify-between items-center p-4 border-b border-light-border dark:border-dark-border">
@@ -636,7 +639,7 @@
             };
             const closeModal = () => {
                 modal.classList.add('hidden');
-                document.body.style.overflow = '';
+                // Body overflow is handled globally now, so no need to change it here
             };
             openModalButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -644,7 +647,6 @@
                     if (courseData[courseKey]?.slides.length > 0) {
                         openModal(courseKey);
                     } else {
-                        // Idealmente, substitua 'alert' por um modal de notificação mais elegante.
                         alert('Conteúdo para este curso não está disponível ainda.');
                     }
                 });
@@ -689,24 +691,63 @@
             });
             updateThemeUI(localStorage.getItem('theme') || 'dark');
 
-            // --- Lógica de Navegação Ativa e Animação de Scroll ---
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const content = entry.target.querySelector('.section-content');
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        navLinks.forEach(link => {
-                            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-                        });
-                        content.classList.add('is-visible');
+            
+            // --- ✨ NOVO: Lógica de Transição de Seção ---
+            const allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            const sections = document.querySelectorAll('.section-container');
+
+            // 1. Definir o estado inicial
+            sections.forEach((section, index) => {
+                if (index === 0) {
+                    section.classList.add('section-active');
+                } else {
+                    section.classList.add('section-inactive');
+                }
+            });
+            document.querySelector('.nav-link[href="#cfsd"]')?.classList.add('active');
+
+
+            // 2. Criar a função para trocar de seção
+            function switchSection(event) {
+                event.preventDefault(); // Impede o comportamento padrão de link de âncora
+                
+                const targetId = event.currentTarget.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+
+                // Não faz nada se a seção clicada já estiver ativa
+                if (!targetSection || targetSection.classList.contains('section-active')) {
+                    return;
+                }
+
+                // Encontra a seção atualmente ativa
+                const currentActiveSection = document.querySelector('.section-active');
+
+                // Desativa a seção atual
+                if (currentActiveSection) {
+                    currentActiveSection.classList.remove('section-active');
+                    currentActiveSection.classList.add('section-inactive');
+                }
+                
+                // Ativa a nova seção
+                targetSection.classList.add('section-active');
+                targetSection.classList.remove('section-inactive');
+                
+                // Atualiza o estado 'active' nos links de navegação
+                allNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === targetId) {
+                        link.classList.add('active');
                     }
                 });
-            }, { threshold: 0.3 });
-            sections.forEach(section => observer.observe(section));
+            }
 
-            // --- Lógica do Menu Responsivo ---
+            // 3. Adicionar o evento de clique a todos os links de navegação
+            allNavLinks.forEach(link => {
+                link.addEventListener('click', switchSection);
+            });
+
+
+            // --- Lógica do Menu Responsivo (sem alterações) ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const closeMobileMenuButton = document.getElementById('close-mobile-menu');
@@ -717,14 +758,12 @@
                 mobileMenu.classList.remove('-translate-x-full');
                 mobileMenu.classList.add('is-open'); // Para animar os links
                 menuOverlay.classList.remove('hidden');
-                document.body.classList.add('overflow-hidden', 'md:overflow-auto');
             }
 
             function closeMenu() {
                 mobileMenu.classList.add('-translate-x-full');
                 mobileMenu.classList.remove('is-open'); // Reseta a animação
                 menuOverlay.classList.add('hidden');
-                document.body.classList.remove('overflow-hidden', 'md:overflow-auto');
             }
 
             mobileMenuButton.addEventListener('click', openMenu);
