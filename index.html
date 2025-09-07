@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[EsGM] Cursos</title>
     
+    <!-- ✨ NOVO: Favicon -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/j0Wl6DQ.png">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -77,66 +80,35 @@
             border: 2px solid var(--scrollbar-track-bg);
         }
 
-        /* --- ✨ NOVO: Estilos do Preloader --- */
+        /* Preloader */
         #preloader {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background-color: #1E1E1E;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: fixed; inset: 0; z-index: 9999;
+            background-color: #1E1E1E; display: flex; align-items: center; justify-content: center;
             transition: opacity 0.8s ease-in-out;
         }
-        html.light #preloader {
-            background-color: #F1F1F1;
-        }
-        .preloader-hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+        html.light #preloader { background-color: #F1F1F1; }
+        .preloader-hidden { opacity: 0; pointer-events: none; }
         .loader-icon {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #3E3E3E;
-            border-radius: 50%;
-            border-top-color: #3B82F6;
-            animation: spin 1s linear infinite;
+            width: 50px; height: 50px; border: 4px solid #3E3E3E; border-radius: 50%;
+            border-top-color: #3B82F6; animation: spin 1s linear infinite;
         }
-        html.light .loader-icon {
-            border-color: #DCDCDC;
-            border-top-color: #3B82F6;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        html.light .loader-icon { border-color: #DCDCDC; border-top-color: #3B82F6; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Oculta o conteúdo principal inicialmente */
-        .content-hidden {
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
+        .content-hidden { opacity: 0; transition: opacity 1s ease; }
         
-        /* Estilos da Navbar */
+        /* Navbar */
         .navbar {
-            position: fixed;
-            left: 50%;
-            transform: translateX(-50%);
-            top: 20px;
-            padding: 6px 15px;
-            width: 90%;
-            max-width: 500px;
-            z-index: 50;
-            border-radius: 9999px;
-            opacity: 0;
+            position: fixed; left: 50%; transform: translateX(-50%); top: 20px; padding: 6px 15px;
+            width: 90%; max-width: 500px; z-index: 50; border-radius: 9999px; opacity: 0;
             animation: fadeInDown 0.8s 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         .navbar ul { display: flex; justify-content: center; width: 100%; gap: 1.25rem; }
         .navbar li { text-align: center; }
         .nav-link {
             padding: 10px 5px; font-size: 14px; font-weight: 500; display: inline-block;
-            position: relative; color: #a7a7a7;
-            transition: color 0.4s ease, transform 0.4s ease;
+            position: relative; color: #a7a7a7; transition: color 0.4s ease, transform 0.4s ease;
         }
         html.light .nav-link { color: #4b5563; }
         .nav-link:hover { color: #ffffff; transform: translateY(-2px); }
@@ -154,44 +126,31 @@
         .mobile-nav-link:hover { transform: translateX(5px); }
 
         /* Animações e Utilitários */
-        @keyframes fadeInModal {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        @keyframes fadeInModal { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .modal-fade-in { animation: fadeInModal 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translate(-50%, -100%); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
+        @keyframes fadeInDown { from { opacity: 0; transform: translate(-50%, -100%); } to { opacity: 1; transform: translate(-50%, 0); } }
         .hidden { display: none; }
         
-        /* --- ✨ APRIMORADO: Estilos para transição de secção --- */
+        /* Transição de secção */
         main { position: relative; width: 100vw; height: 100vh; }
         .section-container {
             display: flex; align-items: center; justify-content: center;
             padding: 8rem 1rem; position: absolute; inset: 0;
-            /* Duração, curva e propriedades da transição aprimoradas */
             transition: opacity 1000ms cubic-bezier(0.87, 0, 0.13, 1), 
                         transform 1000ms cubic-bezier(0.87, 0, 0.13, 1),
                         filter 1000ms cubic-bezier(0.87, 0, 0.13, 1);
         }
         .section-inactive {
-            opacity: 0;
-            transform: scale(0.95); /* Encolhe ao sair */
-            filter: blur(10px); /* Desfoca ao sair */
-            pointer-events: none;
-            z-index: 1;
+            opacity: 0; transform: scale(0.95); filter: blur(10px);
+            pointer-events: none; z-index: 1;
         }
         .section-active {
-            opacity: 1;
-            transform: scale(1); /* Tamanho normal ao entrar */
-            filter: blur(0); /* Foca ao entrar */
-            pointer-events: auto;
-            z-index: 10;
+            opacity: 1; transform: scale(1); filter: blur(0);
+            pointer-events: auto; z-index: 10;
         }
         .section-content { text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
         
-        /* Efeito radial para os botões */
+        /* Botões */
         .btn-radial-effect {
             position: relative; overflow: hidden; z-index: 1;
             transition: box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1), color 0.5s cubic-bezier(0.19, 1, 0.22, 1), transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
@@ -199,8 +158,7 @@
         .btn-radial-effect .btn-content { position: relative; z-index: 2; }
         .btn-radial-effect::before {
             content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
-            background-color: white; border-radius: 50%;
-            transform: translate(-50%, -50%);
+            background-color: white; border-radius: 50%; transform: translate(-50%, -50%);
             transition: width 0.5s cubic-bezier(0.19, 1, 0.22, 1), height 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             z-index: 0;
         }
@@ -218,74 +176,64 @@
             animation: move 25s linear infinite;
         }
         html.light .circle { background: radial-gradient(circle, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0)); }
-        .circle.xxlarge { width: 40vw; height: 40vw; }
-        .circle.xlarge { width: 30vw; height: 30vw; }
-        .circle.large { width: 20vw; height: 20vw; }
-        .shade1 { top: 10%; left: 10%; animation-duration: 20s; }
-        .shade2 { top: 50%; left: 60%; animation-duration: 30s; }
-        .shade3 { top: 80%; left: 20%; animation-duration: 25s; }
-        @keyframes move {
-            0% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-40px) translateX(40px); }
-            100% { transform: translateY(0) translateX(0); }
-        }
+        .circle.xxlarge { width: 40vw; height: 40vw; } .circle.xlarge { width: 30vw; height: 30vw; } .circle.large { width: 20vw; height: 20vw; }
+        .shade1 { top: 10%; left: 10%; animation-duration: 20s; } .shade2 { top: 50%; left: 60%; animation-duration: 30s; } .shade3 { top: 80%; left: 20%; animation-duration: 25s; }
+        @keyframes move { 0% { transform: translateY(0) translateX(0); } 50% { transform: translateY(-40px) translateX(40px); } 100% { transform: translateY(0) translateX(0); } }
 
-        /* Efeito de aura */
+        /* Aura */
         .aura-container { position: relative; display: flex; align-items: center; justify-content: center; }
         .aura-container img { transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
         .aura-container:hover img { transform: scale(1.08); }
         .aura-container::after {
             content: ''; position: absolute; width: 150%; height: 150%;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0) 60%);
-            border-radius: 50%; z-index: 0;
-            animation: slow-spin 20s linear infinite;
+            border-radius: 50%; z-index: 0; animation: slow-spin 20s linear infinite;
         }
         @keyframes slow-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         
-        /* Botão de Tema */
+        /* UI Elements */
         #theme-toggle { transition: background-color 0.4s ease, transform 0.4s ease; }
         #theme-toggle:hover { transform: scale(1.1); background-color: rgba(59, 130, 246, 0.2); }
         #theme-toggle svg { transition: transform 0.5s ease-in-out; }
         .toggled svg { transform: rotate(180deg); }
 
-        /* Menu Mobile */
         #mobile-menu { transition-duration: 500ms; }
         #mobile-menu.is-open nav ul li { opacity: 0; transform: translateX(-15px); animation: slideIn 0.5s ease-out forwards; }
-        #mobile-menu.is-open nav ul li:nth-child(1) { animation-delay: 0.1s; }
-        #mobile-menu.is-open nav ul li:nth-child(2) { animation-delay: 0.15s; }
-        #mobile-menu.is-open nav ul li:nth-child(3) { animation-delay: 0.2s; }
-        #mobile-menu.is-open nav ul li:nth-child(4) { animation-delay: 0.25s; }
+        #mobile-menu.is-open nav ul li:nth-child(1) { animation-delay: 0.1s; } #mobile-menu.is-open nav ul li:nth-child(2) { animation-delay: 0.15s; }
+        #mobile-menu.is-open nav ul li:nth-child(3) { animation-delay: 0.2s; } #mobile-menu.is-open nav ul li:nth-child(4) { animation-delay: 0.25s; }
         @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
 
-        /* Botões do Modal */
         #prev-slide, #next-slide { transition: background-color 0.3s ease, transform 0.3s ease; }
         #prev-slide:not(:disabled):hover, #next-slide:not(:disabled):hover { transform: translateY(-2px); }
+
+        /* ✨ NOVO: Estilos dos Créditos */
+        #credits {
+            transition: color 0.3s ease;
+            opacity: 0;
+            animation: fadeInCredits 1s ease-in-out 1.8s forwards;
+        }
+        @keyframes fadeInCredits {
+            to { opacity: 0.6; }
+        }
     </style>
 </head>
 <body class="transition-colors duration-300 bg-light-bg dark:bg-dark-bg">
 
-    <!-- ✨ NOVO: Preloader -->
-    <div id="preloader">
-        <div class="loader-icon"></div>
-    </div>
+    <div id="preloader"><div class="loader-icon"></div></div>
 
-    <!-- Fundo animado -->
     <div id="background-animation">
         <div class="circle xxlarge shade1"></div>
         <div class="circle xlarge shade2"></div>
         <div class="circle large shade3"></div>
     </div>
     
-    <!-- Backgrounds Dinâmicos -->
     <div id="light-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/2566gq6.png');"></div>
     <div id="dark-bg-img" class="fixed inset-0 z-[-1] bg-cover bg-center bg-fixed transition-opacity duration-1000 opacity-0" style="background-image: url('https://i.imgur.com/dI5Nb2r.png');"></div>
 
-    <!-- Mobile Menu Button -->
     <button id="mobile-menu-button" class="md:hidden fixed top-4 right-4 z-[90] p-2 rounded-md bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-sm">
         <svg class="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
     </button>
 
-    <!-- Mobile Side Menu -->
     <div id="mobile-menu" class="md:hidden fixed inset-y-0 left-0 w-64 bg-light-card/80 dark:bg-dark-card/80 backdrop-blur-lg border-r border-light-border/50 dark:border-dark-border/50 shadow-lg transform -translate-x-full transition-transform ease-in-out z-[100]">
         <div class="flex justify-between items-center p-4 border-b border-light-border/50 dark:border-dark-border/50">
               <h2 class="font-bold text-lg text-gray-800 dark:text-white">Navegação</h2>
@@ -304,20 +252,18 @@
     </div>
     <div id="menu-overlay" class="md:hidden hidden fixed inset-0 bg-black/50 z-[99]"></div>
 
-    <!-- ✨ MODIFICADO: Adicionada classe "content-hidden" -->
     <nav class="navbar hidden md:block bg-light-card/20 dark:bg-dark-card/20 backdrop-blur-xl border border-light-border/30 dark:border-dark-border/30 content-hidden">
         <ul>
-            <li><a href="#cfsd" class="nav-link">CFSd</a></li>
+            <li><a href="#cfsd" class="nav-link active">CFSd</a></li>
             <li><a href="#cfcb" class="nav-link">CFCb</a></li>
             <li><a href="#cfsgt" class="nav-link">CFSgt</a></li>
             <li><a href="#cfsbt" class="nav-link">CFSbt</a></li>
         </ul>
     </nav>
 
-    <!-- ✨ MODIFICADO: Adicionada classe "content-hidden" -->
     <main class="content-hidden">
-        <!-- Seção: Curso de Formação de Soldado -->
-        <section id="cfsd" class="section-container">
+        <!-- Seção: CFSd -->
+        <section id="cfsd" class="section-container section-active">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
                     <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
@@ -334,8 +280,8 @@
             </div>
         </section>
 
-        <!-- Seção: Curso de Formação de Cabo -->
-        <section id="cfcb" class="section-container">
+        <!-- Seção: CFCb -->
+        <section id="cfcb" class="section-container section-inactive">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
                     <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
@@ -352,8 +298,8 @@
             </div>
         </section>
 
-        <!-- Seção: Curso de Formação de Sargento -->
-        <section id="cfsgt" class="section-container">
+        <!-- Seção: CFSgt -->
+        <section id="cfsgt" class="section-container section-inactive">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                  <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
                     <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
@@ -370,8 +316,8 @@
             </div>
         </section>
 
-        <!-- Seção: Curso de Formação de Subtenente -->
-        <section id="cfsbt" class="section-container">
+        <!-- Seção: CFSbt -->
+        <section id="cfsbt" class="section-container section-inactive">
             <div class="section-content text-white max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-center md:text-left">
                 <div class="aura-container order-first md:order-none mb-8 md:mb-0 w-48 h-48 sm:w-64 sm:h-64">
                     <img src="https://i.imgur.com/j0Wl6DQ.png" alt="Ilustração do curso" class="relative z-10 w-48 h-auto sm:w-64">
@@ -389,12 +335,14 @@
         </section>
     </main>
 
-    <!-- Seletor de Tema -->
     <div class="fixed bottom-5 left-5 z-50">
         <button id="theme-toggle" aria-label="Mudar tema" class="w-12 h-12 flex items-center justify-center rounded-full bg-light-card/25 dark:bg-dark-card/25 backdrop-blur-lg border border-light-border/50 dark:border-dark-border/50 shadow-md">
             <!-- Ícone inserido via JS -->
         </button>
     </div>
+    
+    <!-- ✨ NOVO: Créditos -->
+    <div id="credits" class="fixed bottom-5 right-5 z-50 text-xs text-gray-500 dark:text-gray-400">Desenvolvido por Miven</div>
 
     <!-- Modal para Slides -->
     <div id="slide-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 z-[110] flex items-center justify-center p-4">
@@ -413,30 +361,19 @@
     </div>
 
     <script>
-        // --- ✨ NOVO: Lógica do Preloader ---
         window.onload = () => {
             const preloader = document.getElementById('preloader');
-            const contentToReveal = document.querySelectorAll('.content-hidden');
+            const contentToReveal = document.querySelectorAll('.content-hidden, #credits');
 
-            // Começa a esconder o preloader
             preloader.classList.add('preloader-hidden');
-            
-            // Remove o preloader do DOM após a transição para não interferir com cliques
-            setTimeout(() => {
-                preloader.style.display = 'none';
-            }, 800);
+            setTimeout(() => { preloader.style.display = 'none'; }, 800);
 
-            // Revela o conteúdo principal
-            contentToReveal.forEach(el => {
-                el.classList.remove('content-hidden');
-            });
+            contentToReveal.forEach(el => { el.classList.remove('content-hidden'); });
 
-            // O resto do script é executado depois que a página está totalmente carregada
             initializePage();
         };
 
         function initializePage() {
-            // --- Dados dos Cursos ---
             const courseData = {
                 soldado: {
                     title: 'CURSO DE FORMAÇÃO DE SOLDADO/POLICIAL',
@@ -546,7 +483,6 @@
             prevBtn.addEventListener('click', () => { if (currentSlideIndex > 0) renderSlide(currentCourse, --currentSlideIndex); });
             nextBtn.addEventListener('click', () => { if (currentSlideIndex < courseData[currentCourse].slides.length - 1) renderSlide(currentCourse, ++currentSlideIndex); });
 
-            // --- Lógica do Tema ---
             const themeToggle = document.getElementById('theme-toggle');
             const lightBgImg = document.getElementById('light-bg-img');
             const darkBgImg = document.getElementById('dark-bg-img');
@@ -576,15 +512,7 @@
             });
             updateThemeUI(localStorage.getItem('theme') || 'dark');
             
-            // --- Lógica de Transição de Secção ---
             const allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
-            const sections = document.querySelectorAll('.section-container');
-            sections.forEach((section, index) => {
-                if (index === 0) section.classList.add('section-active');
-                else section.classList.add('section-inactive');
-            });
-            document.querySelector('.nav-link[href="#cfsd"]')?.classList.add('active');
-
             function switchSection(event) {
                 event.preventDefault();
                 const targetId = event.currentTarget.getAttribute('href');
@@ -604,7 +532,6 @@
             }
             allNavLinks.forEach(link => link.addEventListener('click', switchSection));
 
-            // --- Lógica do Menu Responsivo ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const closeMobileMenuButton = document.getElementById('close-mobile-menu');
@@ -617,6 +544,29 @@
             menuOverlay.addEventListener('click', closeMenu);
             mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
         }
+    </script>
+    
+    <!-- ✨ NOVO: Script anti-inspeção -->
+    <script>
+        (function() {
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.addEventListener('keydown', event => {
+                if (event.key === 'F12' || 
+                   (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) ||
+                   (event.ctrlKey && event.key === 'U')) {
+                    event.preventDefault();
+                }
+            });
+
+            const devToolsChecker = () => {
+                setInterval(() => {
+                    try {
+                        (function() {return false;})['constructor']('debugger')['call']();
+                    } catch (e) { /* Ignora */ }
+                }, 50);
+            };
+            devToolsChecker();
+        })();
     </script>
 </body>
 </html>
